@@ -114,7 +114,9 @@ There are no lint or type checks implemented.
 ### The Server Inspector
 mcp dev mcp_server.py
 
-
+uv run mcp_client.py
+uv run mcp_server.py
+uv run main.py
 
 
 
