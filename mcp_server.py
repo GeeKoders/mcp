@@ -1,5 +1,5 @@
 from mcp.server.fastmcp import FastMCP
-
+from typing import List
 mcp = FastMCP("DocumentMCP", log_level="ERROR")
 
 
@@ -45,8 +45,15 @@ def edit_document(
         raise ValueError(f"Doc with id {doc_id} not found")
     docs[doc_id] = docs[doc_id].replace(old_str, new_str)
 
+@mcp.resource("docs://documents", mime_type="application/json")
+def list_docs() -> List[str]:
+    return list(docs.keys())
 
-
+@mcp.resource("docs://documents/{doc_id}", mime_type="text/plain")
+def fetch_doc(doc_id: str) -> str:
+    if doc_id not in docs:
+        raise ValueError(f"Doc with id {doc_id} not found")
+    return docs[doc_id]
 
 
 if __name__ == "__main__":
