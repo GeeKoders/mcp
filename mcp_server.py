@@ -19,6 +19,35 @@ docs = {
 # TODO: Write a prompt to rewrite a doc in markdown format
 # TODO: Write a prompt to summarize a doc
 
+from pydantic import Field
+
+@mcp.tool(
+    name="read_doc_contents",
+    description="Read the contents of a document and return it as a string.",
+)
+def read_document(
+    doc_id: str = Field(description="The ID of the document to read")
+):
+    if doc_id not in docs:
+        raise ValueError(f"Doc with id {doc_id} not found")
+    return docs[doc_id]
+
+@mcp.tool(
+    name="edit_document",
+    description="Edit a document by replacing a string in the documents content with a new string",
+)
+def edit_document(
+    doc_id: str = Field(description="The ID of the document that will be edited"),
+    old_str: str = Field(description="The text to replace. Must match exactly, including whotespace"),
+    new_str: str = Field(description="The text to insert in place of the old text"),
+):
+    if doc_id not in docs:
+        raise ValueError(f"Doc with id {doc_id} not found")
+    docs[doc_id] = docs[doc_id].replace(old_str, new_str)
+
+
+
+
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")
